@@ -28,10 +28,16 @@ num = len(titles) - 1
 
 # Take a closer look at the last publication
 last_pub = author.publications[num].fill()
-# print(last_pub)
+for pub in author.publications:
+    pub.fill()
+    print(pub.bib['url'])
 titles.reverse()
+
 # print(titles[0])
+
+
 #link = ([pub.bib['url'] for pub in author.publications])
+#print(link)
 
 # Tweet last paper
 # api.update_status("Check out our latest paper!" + str(titles[0]) + str(link))
