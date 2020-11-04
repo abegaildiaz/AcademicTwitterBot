@@ -24,7 +24,6 @@ author = next(search_query).fill()
 # Count number of author's publications
 titles = ([pub.bib['title'] for pub in author.publications])
 num = len(titles) - 1 
-# print(num)
 
 # Take a closer look at the last publication
 last_pub = author.publications[num].fill()
