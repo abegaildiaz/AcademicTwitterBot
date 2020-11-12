@@ -1,10 +1,12 @@
 import json
 import tweepy
-from scholarly import scholarly # ProxyGenerator
+from scholarly import scholarly , ProxyGenerator
+import datetime
+from fp.fp import FreeProxy
 
-# pg = ProxyGenerator()
-# pg.FreeProxies()
-# scholarly.use_proxy(pg)
+now = datetime.datetime.now()
+current_year = now.year
+adam_id = 'GqBRrLMAAAAJ'
 
 with open('creds.json') as f:
     keys = json.load(f)
@@ -14,23 +16,24 @@ auth.set_access_token(keys["access_token"], keys["access_token_secret"])
 # Create API object
 api = tweepy.API(auth)
 
+# pg = ProxyGenerator()
+# proxy = FreeProxy(rand=True, timeout=1, country_id=['US']).get()
+# pg.SingleProxy(http =proxy, https =proxy)
+# scholarly.use_proxy(pg)
+
 # Retrieve the author's data, fill-in, and print
-search_query = scholarly.search_author('Adam Moule')
-author = next(search_query).fill()
-# print(author.fill(sections=['basics']))
-# author = next(search_query)
-# print(author)
+search_query = scholarly.search_pubs('Adam Moule', year_low=current_year)
+publication_results = []
+for i in range(len(search_query._rows)):
+    publication_results.append(next(search_query).fill())
+print(publication_results)
+adam_publications = []
 
-# Count number of author's publications
-titles = ([pub.bib['title'] for pub in author.publications])
-num = len(titles) - 1 
-
-# Take a closer look at the last publication
-last_pub = author.publications[num].fill()
-for pub in author.publications:
-    pub.fill()
-    print(pub.bib['url'])
-titles.reverse()
+#Build list of actual publications Adam is an author on.
+for pub in publication_results:
+    if adam_id in pub['author_id']:
+        adam_publications.append(pub)
+print(adam_publications)
 
 # print(titles[0])
 
