@@ -23,5 +23,5 @@ url = base_url + expression + '&' + attributes + '&' + order_by + '&' + key
 response = requests.get(url)
 response_json = response.json()
 
-with open('recent_pubs.json.json', 'w') as outfile:
+with open('recent_pubs.json', 'w') as outfile:
     json.dump(response_json, outfile)
