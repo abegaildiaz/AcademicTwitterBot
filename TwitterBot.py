@@ -3,6 +3,36 @@ import tweepy
 from scholarly import scholarly , ProxyGenerator
 import datetime
 from fp.fp import FreeProxy
+import requests
+
+def update_recent_pubs():
+    base_url = "https://api.labs.cognitive.microsoft.com/academic/v1.0/evaluate?"
+
+    with open('creds.json') as f:
+        keys = json.load(f)
+    secondary_key = keys["microsoft_secondary_key"]
+    # Search expression
+    expression = "expr=Composite(AA.AuId=2100780784)"
+
+    # Response Attributes
+    attributes = "attributes=DOI,Ti"
+
+    # Order By 0=relevance 1=newest first
+    order_by = "orderby=D"
+
+    # API Key
+    key = "subscription-key="+secondary_key
+
+
+    url = base_url + expression + '&' + attributes + '&' + order_by + '&' + key
+    response = requests.get(url)
+    response_json = response.json()
+
+    with open('recent_pubs.json', 'w') as outfile:
+        json.dump(response_json, outfile)
+    
+    # Return most recent responses as json object
+    return response_json
 
 now = datetime.datetime.now()
 current_year = now.year
@@ -16,26 +46,17 @@ auth.set_access_token(keys["access_token"], keys["access_token_secret"])
 # Create API object
 api = tweepy.API(auth)
 
-# pg = ProxyGenerator()
-# proxy = FreeProxy(rand=True, timeout=1, country_id=['US']).get()
-# pg.SingleProxy(http =proxy, https =proxy)
-# scholarly.use_proxy(pg)
+# prev_pubs_json contains results from previous day
+with open('recent_pubs.json') as f:
+    prev_pubs_json = json.load(f)
 
-# Retrieve the author's data, fill-in, and print
-search_query = scholarly.search_pubs('Adam Moule', year_low=current_year)
-publication_results = []
-for i in range(len(search_query._rows)):
-    publication_results.append(next(search_query).fill())
-print(publication_results)
-adam_publications = []
+# recent_pubs_json contains results from today
+recent_pubs_json = update_recent_pubs()
 
-#Build list of actual publications Adam is an author on.
-for pub in publication_results:
-    if adam_id in pub['author_id']:
-        adam_publications.append(pub)
-print(adam_publications)
+# Difference between today and yesterday
 
-# print(titles[0])
+# Loop through each new result and tweet the paper
+
 
 
 #link = ([pub.bib['url'] for pub in author.publications])
