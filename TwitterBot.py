@@ -4,6 +4,7 @@ from scholarly import scholarly , ProxyGenerator
 import datetime
 from fp.fp import FreeProxy
 import requests
+import random 
 
 def update_recent_pubs():
     base_url = "https://api.labs.cognitive.microsoft.com/academic/v1.0/evaluate?"
@@ -55,16 +56,32 @@ recent_pubs_json = update_recent_pubs()
 # print(recent_pubs_json)
 
 # Difference between today and yesterday
-prev_pubs = json.dumps(prev_pubs_json)
-recent_pubs = json.dumps(recent_pubs_json)
-if recent_pubs in prev_pubs:
-    new_pubs = prev_pubs.replace(recent_pubs,'')
-    print(new_pubs)
+prev_pubs = prev_pubs_json["entities"]
+recent_pubs = recent_pubs_json["entities"]
+prev_pubs_doi = []
+for pub in prev_pubs:
+    try:
+        prev_pubs_doi.append(pub['DOI'])
+    except:
+        continue
+new_pub = []
+for pub in recent_pubs:
+    try:
+        temp_doi = pub['DOI']
+        if not temp_doi in prev_pubs_doi:
+            new_pub.append(pub)
+    except:
+        continue
+print(new_pub)
+
+# https://doi.org/(DOI)
 
 # list of sayings
-tweets = ['Check out our latest paper!','Here is a new paper to read!', 'Read the latest from our group!',\
-    'Find our newest paper at the link below!', 'Read our newest paper!', 'Here is the latest paper from our group!',\
+tweets = ['Check out our latest paper!','Here is a new paper to read!', 'Read the latest from our group!',
+    'Find our newest paper at the link below!', 'Read our newest paper!', 'Here is the latest paper from our group!',
         'Check out what is new with our group!', 'Find a new paper here!']
+
+random.choice(tweets)
 
 # Loop through each new result and tweet the paper
 # api.update_status()
