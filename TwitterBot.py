@@ -61,12 +61,10 @@ if recent_pubs in prev_pubs:
     new_pubs = prev_pubs.replace(recent_pubs,'')
     print(new_pubs)
 
-# Loop through each new result and tweet the paper
-
 # list of sayings
 tweets = ['Check out our latest paper!','Here is a new paper to read!', 'Read the latest from our group!',\
     'Find our newest paper at the link below!', 'Read our newest paper!', 'Here is the latest paper from our group!',\
         'Check out what is new with our group!', 'Find a new paper here!']
 
-# Tweet last paper
+# Loop through each new result and tweet the paper
 # api.update_status()
