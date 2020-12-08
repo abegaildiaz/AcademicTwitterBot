@@ -52,17 +52,21 @@ with open('recent_pubs.json') as f:
 
 # recent_pubs_json contains results from today
 recent_pubs_json = update_recent_pubs()
+# print(recent_pubs_json)
 
 # Difference between today and yesterday
+prev_pubs = json.dumps(prev_pubs_json)
+recent_pubs = json.dumps(recent_pubs_json)
+if recent_pubs in prev_pubs:
+    new_pubs = prev_pubs.replace(recent_pubs,'')
+    print(new_pubs)
 
 # Loop through each new result and tweet the paper
 
-
-
-#link = ([pub.bib['url'] for pub in author.publications])
-#print(link)
+# list of sayings
+tweets = ['Check out our latest paper!','Here is a new paper to read!', 'Read the latest from our group!',\
+    'Find our newest paper at the link below!', 'Read our newest paper!', 'Here is the latest paper from our group!',\
+        'Check out what is new with our group!', 'Find a new paper here!']
 
 # Tweet last paper
-# api.update_status("Check out our latest paper!" + str(titles[0]) + str(link))
-
-# print("Check out our latest paper!" + str(title[0]))
+# api.update_status()
