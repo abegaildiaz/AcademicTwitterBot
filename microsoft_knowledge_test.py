@@ -7,13 +7,13 @@ with open('creds.json') as f:
     keys = json.load(f)
 secondary_key = keys["microsoft_secondary_key"]
 # Search expression
-expression = "expr=Composite(AA.AuId=2100780784)"
+expression = "expr=And(Composite(AA.AuId=2100780784),Y>=2020)"
 
 # Response Attributes
-attributes = "attributes=DOI,Ti"
+attributes = "attributes=DOI,Ti,D"
 
 # Order By 0=relevance 1=newest first
-order_by = "orderby=D"
+order_by = "orderby=D:desc"
 
 # API Key
 key = "subscription-key="+secondary_key
@@ -25,3 +25,4 @@ response_json = response.json()
 
 with open('recent_pubs.json', 'w') as outfile:
     json.dump(response_json, outfile)
+newest_doi = response_json["entities"][0]["DOI"]
